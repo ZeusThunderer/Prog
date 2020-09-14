@@ -1,0 +1,36 @@
+class Lab1 {
+    public static void main(String[] args) {
+        long[] d = new long [8];
+		for (int i = 20, y = 0;i > 5; i-=2,y++)
+			d[y] = i;
+		float x[] = new float [17], min = -9.0f, max = 14.0f;
+		for (int i = 0; i < 17; i++)
+			x[i] =(float)(min + Math.random() * (max - min));
+		double[][] d1 = new double [8][17];
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 17; j++)
+			{
+				switch ((int)d[i])
+				{
+					case 16:
+						d1[i][j] = Math.pow(0.25 * (2/3 + Math.sin(Math.pow(x[j],x[j]))), Math.asin(Math.sin(x[j])));
+						break;
+					case 10:
+					case 12:
+					case 14:
+					case 20:
+						d1[i][j] = (Math.cos(Math.log(Math.abs(x[j]))) + 3)/(Math.pow(Math.sin(x[j]) + 1, Math.sin(x[j])));
+						break;
+					case 6:
+					case 8:
+					case 18:
+						d1[i][j] = Math.tan(Math.pow(Math.pow(2*(Math.pow(4/x[j],2)+3),3),2));
+				}
+				System.out.printf("%.2f ", d1[i][j]);
+			}
+			System.out.println();
+		}
+			
+    }
+}
