@@ -1,3 +1,4 @@
+package mypackage;
 import ru.ifmo.se.pokemon.*;
 
 //  PHYSICAL MOVES
@@ -8,7 +9,7 @@ class ShadowClaw extends PhysicalMove {
 
 	@Override
 	protected double calcCriticalHit(Pokemon att, Pokemon def) {
-		if (Math.random() <= 1 / 8) {
+		if (Math.random() <= 1.0 / 8.0) {
 			System.out.println("Критический удар!");
 			return 2.0;
 		} else
@@ -143,7 +144,7 @@ class Rest extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "использует Rest\n";
+		return "использует Rest";
 
 	}
 }

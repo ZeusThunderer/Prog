@@ -1,4 +1,4 @@
-
+package mypackage;
 public class Mamoswine extends Piloswine {
 	public Mamoswine() {
 		super();

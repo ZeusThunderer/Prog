@@ -1,3 +1,4 @@
+package mypackage;
 import ru.ifmo.se.pokemon.*;
 
 public class Swinub extends Pokemon {

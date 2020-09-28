@@ -1,4 +1,4 @@
-
+package mypackage;
 public class Banette extends Shuppet {
 
 	public Banette() {

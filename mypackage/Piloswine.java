@@ -1,3 +1,4 @@
+package mypackage;
 
 public class Piloswine extends Swinub {
 	public Piloswine() {
