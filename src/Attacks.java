@@ -8,8 +8,8 @@ class ShadowClaw extends PhysicalMove {
 
 	@Override
 	protected double calcCriticalHit(Pokemon att, Pokemon def) {
-		if (Math.random() <= 1 / 8) {
-			System.out.println("Êðèòè÷åñêèé óäàð!");
+		if (Math.random() <= 1.0 / 8.0) {
+			System.out.println("ÃŠÃ°Ã¨Ã²Ã¨Ã·Ã¥Ã±ÃªÃ¨Ã© Ã³Ã¤Ã Ã°!");
 			return 2.0;
 		} else
 			return 1.0;
@@ -17,7 +17,7 @@ class ShadowClaw extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Shadow Claw";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Shadow Claw";
 	}
 }
 
@@ -34,7 +34,7 @@ class RockClimb extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Rock Climb";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Rock Climb";
 	}
 }
 
@@ -45,7 +45,7 @@ class ShadowSneak extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Shadow Sneak";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Shadow Sneak";
 	}
 }
 
@@ -62,7 +62,7 @@ class DracoMeteor extends SpecialMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Draco Meteor";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Draco Meteor";
 	}
 }
 
@@ -79,7 +79,7 @@ class DarkPulse extends SpecialMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Dark Pulse";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Dark Pulse";
 	}
 }
 
@@ -109,7 +109,7 @@ class HoneClaws extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Hone Claws";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Hone Claws";
 	}
 }
 
@@ -126,7 +126,7 @@ class Swagger extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Swagger";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Swagger";
 	}
 }
 
@@ -143,7 +143,7 @@ class Rest extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Rest\n";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Rest\n";
 
 	}
 }
@@ -160,7 +160,7 @@ class DoubleTeam extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Double Team";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Double Team";
 	}
 }
 
@@ -176,6 +176,6 @@ class Amnesia extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Amnesia";
+		return "Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã³Ã¥Ã² Amnesia";
 	}
 }
