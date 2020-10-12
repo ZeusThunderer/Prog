@@ -9,7 +9,7 @@ class ShadowClaw extends PhysicalMove {
 	@Override
 	protected double calcCriticalHit(Pokemon att, Pokemon def) {
 		if (Math.random() <= 1.0 / 8.0) {
-			System.out.println("Êðèòè÷åñêèé óäàð!");
+			System.out.println("Критический удар!");
 			return 2.0;
 		} else
 			return 1.0;
@@ -17,7 +17,7 @@ class ShadowClaw extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Shadow Claw";
+		return "использует Shadow Claw";
 	}
 }
 
@@ -34,7 +34,7 @@ class RockClimb extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Rock Climb";
+		return "использует Rock Climb";
 	}
 }
 
@@ -45,7 +45,7 @@ class ShadowSneak extends PhysicalMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Shadow Sneak";
+		return "использует Shadow Sneak";
 	}
 }
 
@@ -62,7 +62,7 @@ class DracoMeteor extends SpecialMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Draco Meteor";
+		return "использует Draco Meteor";
 	}
 }
 
@@ -79,7 +79,7 @@ class DarkPulse extends SpecialMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Dark Pulse";
+		return "использует Dark Pulse";
 	}
 }
 
@@ -95,7 +95,7 @@ class IceBeam extends SpecialMove {
 	}
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Ice Beam";
+		return "использует Ice Beam";
 	}
 }
 // STATUS MOVES
@@ -113,7 +113,7 @@ class HoneClaws extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Hone Claws";
+		return "использует Hone Claws";
 	}
 }
 
@@ -130,7 +130,7 @@ class Swagger extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Swagger";
+		return "использует Swagger";
 	}
 }
 
@@ -147,7 +147,7 @@ class Rest extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Rest\n";
+		return "использует Rest\n";
 
 	}
 }
@@ -164,7 +164,7 @@ class DoubleTeam extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Double Team";
+		return "использует Double Team";
 	}
 }
 
@@ -180,6 +180,6 @@ class Amnesia extends StatusMove {
 
 	@Override
 	protected String describe() {
-		return "èñïîëüçóåò Amnesia";
+		return "использует Amnesia";
 	}
 }
