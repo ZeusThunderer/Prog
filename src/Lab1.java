@@ -3,9 +3,9 @@ import ru.ifmo.se.pokemon.*;
 public class Lab1 {
 	public static void main(String[] args) {
 		Battle bat = new Battle();
-		bat.addAlly(new Druddigon("у которого неправильно работают атаки", 35));
-		bat.addAlly(new Shuppet("Шапито", 13));
-		bat.addAlly(new Banette("Байонетта", 37));
+		bat.addAlly(new Druddigon("Сѓ РєРѕС‚РѕСЂРѕРіРѕ РЅРµРїСЂР°РІРёР»СЊРЅРѕ СЂР°Р±РѕС‚Р°СЋС‚ Р°С‚Р°РєРё", 35));
+		bat.addAlly(new Shuppet("РЁР°РїРёС‚Рѕ", 13));
+		bat.addAlly(new Banette("Р‘Р°Р№РѕРЅРµС‚С‚Р°", 37));
 		bat.addFoe(new Swinub("Svin", 1));
 		bat.addFoe(new Piloswine("Svinota", 37));
 		bat.addFoe(new Mamoswine("SVINOZAVR", 37));
