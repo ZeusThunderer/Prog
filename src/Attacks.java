@@ -93,6 +93,10 @@ class IceBeam extends SpecialMove {
 		if (Math.random() <= 0.1)
 			Effect.freeze(def);
 	}
+	@Override
+	protected String describe() {
+		return "èñïîëüçóåò Ice Beam";
+	}
 }
 // STATUS MOVES
 
