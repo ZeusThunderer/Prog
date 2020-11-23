@@ -3,40 +3,28 @@ package lab3.items;
 
 import java.util.Objects;
 
-public class Item implements Clean{
-    private String name;
-    private boolean isClean;
+public class Item {
+    protected String name;
     public Item(String name){
         this.name = name;
-        isClean = true;
     }
-    public Item(String name, boolean isClean){
-        this.name = name;
-        this.isClean = isClean;
-    }
-    public boolean getCleanliness() {return isClean;}
-    public void MakeClean() {isClean = true;}
     public String getName() {return name;}
-
+    public void Clean() {};
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Item)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Item item = (Item) o;
-        return isClean == item.isClean &&
-                name.equals(item.name);
+        return name.equals(item.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, isClean);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", isClean=" + isClean +
-                '}';
+        return "Item: " + "\nname= " + name +  '}';
     }
 }
