@@ -7,7 +7,7 @@ public class Towel extends Item{
         this.clean = clean;
     }
 
-    @Override
+
     public void Clean() {
         clean = true;
     }

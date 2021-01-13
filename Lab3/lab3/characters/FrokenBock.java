@@ -17,13 +17,13 @@ public class FrokenBock extends Character{
     }
     public void doTheHousework() {
         print("is clearing the table");
-        currentLocation().getItem(currentLocation().contains(new Dishes("Dishes", false))).Clean();
+
         print("is washing the dishes...");
     }
     public void takeTowel() {
         print("tries to find towels");
-        if (currentLocation().contains(new Towel("Towel", true)) >= 0) {
-            takeItem(currentLocation().getItem(currentLocation().contains(new Towel("Towel", true))));
+        if (currentLocation().contains(new Towel("Towel", true))) {
+            takeItem(currentLocation().withdrawItem(new Towel("Towel", true)));
             print("has taken towels");
         }
         else {
