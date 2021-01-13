@@ -9,6 +9,7 @@ public class Item {
         this.name = name;
     }
     public String getName() {return name;}
+    public void Clean() {};
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

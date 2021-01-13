@@ -19,10 +19,6 @@ public class Karlson extends Character{
     }
 
     public void takeTowels() {
-        this.takeItem(currentLocation().withdrawItem(new Towel("Towel", false)));
-    }
-    public void getOffended(){
-        this.changeMood(Mood.OFFENDED);
-        print("is offended because Lillie Bror's parents did't mentioned him");
+        takeItem(currentLocation().getItem(currentLocation().contains(new Towel("Towel", false))));
     }
 }

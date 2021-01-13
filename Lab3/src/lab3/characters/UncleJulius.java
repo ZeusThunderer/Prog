@@ -10,10 +10,6 @@ public class UncleJulius extends Character {
     }
 
     public void Smoke() {
-        takeItem(currentLocation().withdrawItem(new Cigar("Cigar")));
-    }
-    public void grumbling(){
-        changeMood(Mood.ANGRY);
-        print(" is grumbling: \"What a bad police in town!\"");
+        takeItem(currentLocation().getItem(currentLocation().contains(new Cigar("Cigar"))));
     }
 }

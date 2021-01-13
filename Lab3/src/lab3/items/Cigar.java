@@ -5,6 +5,7 @@ public class Cigar extends Item{
         super(name);
     }
 
+    @Override
     public void Clean() {}
     @Override
     public String toString() {
