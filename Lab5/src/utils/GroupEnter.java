@@ -512,7 +512,7 @@ public class GroupEnter {
     }
 
     public boolean change(String s) throws IncorrectScriptException {
-        String finalQuestion = s + "? (да, нет)";
+        String finalQuestion = s + "? (yes, no)";
         String answer = "";
         while (true) {
             try {
@@ -531,19 +531,19 @@ public class GroupEnter {
                     System.out.println(answer);
                 }
                 if (fileMode) System.out.println(answer);
-                if (!answer.equals("+") && !answer.equals("-")) throw new WrongLimitsException();
+                if (!answer.equals("yes") && !answer.equals("no")) throw new WrongLimitsException();
                 break;
             } catch (NoSuchElementException exception) {
                 System.err.println("Ответ не распознан!");
                 if (fileMode) throw new IncorrectScriptException();
             } catch (WrongLimitsException exception) {
-                System.err.println("Ответ должен быть либо 'да' либо 'нет'!");
+                System.err.println("Ответ должен быть либо 'yes' либо 'no'!");
                 if (fileMode) throw new IncorrectScriptException();
             }  catch (IOException e) {
                 System.err.println("Непредвиденная ошибка!");
             }
         }
-        return (answer.equals("да")) ? true : false;
+        return (answer.equals("yes")) ? true : false;
     }
 
 
