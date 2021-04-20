@@ -131,7 +131,7 @@ public class Output {
             case "add":
                 if (!commander.add(userCommand[1])) return 1;
                 break;
-            case "update_id":
+            case "update":
                 if (!commander.update(userCommand[1])) return 1;
                 break;
             case "remove_by_id":

@@ -18,7 +18,7 @@ public class UpdateIdCommand extends GeneralCommand{
     private GroupCollection groupCollection;
     private GroupEnter groupEnter;
     public UpdateIdCommand(GroupCollection groupCollection,GroupEnter groupEnter) {
-        super("update_id {element} ", " обновить значение элемента коллекции, id которого равен заданному");
+        super("update id {element} ", " обновить значение элемента коллекции, id которого равен заданному");
         this.groupCollection = groupCollection;
         this.groupEnter = groupEnter;
     }
@@ -49,13 +49,13 @@ public class UpdateIdCommand extends GeneralCommand{
 
             groupCollection.removeFromCollection(oldGroup);
 
-            if (groupEnter.change("Хотите изменить имя солдата?")) name = groupEnter.getName();
-            if (groupEnter.change("Хотите изменить координаты солдата?")) coordinates = groupEnter.getCoordinates();
-            if (groupEnter.change("Хотите изменить здоровье солдата?")) studensCount = groupEnter.getStudentsCount();
-            if (groupEnter.change("Хотите изменить категорию солдата?")) expelledStudents = groupEnter.getExpelledStudents();
-            if (groupEnter.change("Хотите изменить оружие дальнего боя солдата?")) averageMark = groupEnter.getAverageMark();
-            if (groupEnter.change("Хотите изменить оружие ближнего боя солдата?")) semester = groupEnter.getSemester();
-            if (groupEnter.change("Хотите изменить орден солдата?")) groupAdmin = groupEnter.getGroupAdmin();
+            if (groupEnter.change("Хотите изменить имя группы?")) name = groupEnter.getName();
+            if (groupEnter.change("Хотите изменить координаты группы?")) coordinates = groupEnter.getCoordinates();
+            if (groupEnter.change("Хотите изменить кол-во студентов?")) studensCount = groupEnter.getStudentsCount();
+            if (groupEnter.change("Хотите изменить кол-во отчисленных студентов?")) expelledStudents = groupEnter.getExpelledStudents();
+            if (groupEnter.change("Хотите изменить среднюю оценку")) averageMark = groupEnter.getAverageMark();
+            if (groupEnter.change("Хотите изменить семестр?")) semester = groupEnter.getSemester();
+            if (groupEnter.change("Хотите изменить админа группы?")) groupAdmin = groupEnter.getGroupAdmin();
 
             groupCollection.addToCollection(new StudyGroup(
                     id,
