@@ -83,7 +83,6 @@ public class CollectionManager {
 
     public void addToCollection(StudyGroup studyGroup) {
         studyGroupSet.add(studyGroup);
-        saveCollection();
     }
 
     public LocalDateTime getLastInitTime() {
@@ -111,7 +110,6 @@ public class CollectionManager {
 
     public void removeFromCollection(StudyGroup groupToRemove) {
         studyGroupSet.remove(groupToRemove);
-        saveCollection();
     }
 
     public void clearCollection() {
@@ -127,12 +125,10 @@ public class CollectionManager {
 
     public void removeGreater(StudyGroup groupByValue) {
         studyGroupSet.removeIf(group -> group.compareTo(groupByValue) > 0);
-        saveCollection();
     }
 
     public void removeLower(StudyGroup groupByValue) {
         studyGroupSet.removeIf(group -> group.compareTo(groupByValue) < 0);
-        saveCollection();
     }
 
     public int getSumOfExStudents() {

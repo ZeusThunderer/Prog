@@ -26,7 +26,6 @@ public class Main {
             commands.put( "remove_by_id" , new RemoveByIdCommand( collectionManager ) );
             commands.put( "remove_greater" , new RemoveGreaterCommand( collectionManager ) );
             commands.put( "remove_lower" , new RemoveLowerCommand( collectionManager ) );
-            commands.put( "save" , new SaveCommand( collectionManager ) );
             commands.put( "show" , new ShowCommand( collectionManager ) );
             commands.put( "sum_of_expelled_students" , new SumOfExStudentsCommand( collectionManager ) );
             commands.put( "update_by_id" , new UpdateIdCommand( collectionManager ) );

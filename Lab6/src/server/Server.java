@@ -108,6 +108,7 @@ public class Server {
                 System.err.println("Непредвиденный разрыв соединения с клиентом!");
             } else {
                 System.out.println("Клиент успешно отключен от сервера!");
+                requestHandler.getCommandManager().getCommands().get("save").execute(null);
             }
         }
         return true;

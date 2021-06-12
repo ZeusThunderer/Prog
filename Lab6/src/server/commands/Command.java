@@ -7,9 +7,5 @@ import common.exchange.Response;
 public interface Command {
     CommandStatus whatNeeded();
     Response execute(Request request);
-
-
     String getName();
-
-    String getDescription();
 }

@@ -6,7 +6,7 @@ import common.exchange.Request;
 import common.exchange.Response;
 import server.utils.CollectionManager;
 
-public class SaveCommand extends GeneralCommand{
+public class SaveCommand extends GeneralCommand {
     private CollectionManager collectionManager;
 
     public SaveCommand(CollectionManager collectionManager) {
@@ -16,22 +16,18 @@ public class SaveCommand extends GeneralCommand{
 
     @Override
     public CommandStatus whatNeeded() {
-        return null;
+        return CommandStatus.ERROR;
     }
+
     /**
      * Executes the command.
-     * @return Command exit status.
+     *
      * @param request
+     * @return Command exit status.
      */
     @Override
     public Response execute(Request request) {
-        try {
-            if (!request.isEmpty()) throw new WrongArgumentException();
-            collectionManager.saveCollection();
-            return null;
-        } catch (WrongArgumentException e) {
-            System.err.println("Неправильное использование: '" + getName() + "'");
-        }
+        collectionManager.saveCollection();
         return null;
     }
 }

@@ -7,5 +7,6 @@ public enum CommandStatus implements Serializable {
     NEED_GROUP,
     NEED_PERSON,
     ERROR,
+    SAVE,
     EXIT
 }

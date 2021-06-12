@@ -26,7 +26,18 @@ public class FileManager {
         if (System.getenv(envVariable) != null) {
             try (BufferedInputStream collectionStream = new BufferedInputStream(new FileInputStream(new File(System.getenv(envVariable))))) {
                 Type collectionType = new TypeToken<LinkedHashSet<StudyGroup>>() {}.getType();
-                LinkedHashSet<StudyGroup> collection = gson.fromJson( new String(collectionStream.readAllBytes()), collectionType);
+                char c;
+                String str = "";
+                while (collectionStream.read()!= -1) {
+                    c = (char) collectionStream.read();
+                    if (c == '\n')
+                        break;
+                    str += c + "";
+                }
+                str.replace('\r' , ' ');
+                str = str.trim();
+                System.out.println(str);
+                LinkedHashSet<StudyGroup> collection = gson.fromJson( str, collectionType);
                 System.out.println("Коллекция успешна загружена!");
                 return collection;
             } catch (FileNotFoundException exception) {
@@ -39,7 +50,7 @@ public class FileManager {
                 System.err.println("Непредвиденная ошибка!");
             }
         } else System.err.println("Системная переменная с загрузочным файлом не найдена!");
-        return new LinkedHashSet<StudyGroup>();
+        return new LinkedHashSet<>();
     }
 
     /**
