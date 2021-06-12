@@ -24,9 +24,9 @@ public class AddIfMaxCommand extends GeneralCommand{
             System.out.println("Группа успешно добавлена");
             if (groupCollection.collectionSize() == 0 || group.compareTo(groupCollection.getFirst()) < 0) {
                 groupCollection.addToCollection(group);
-                System.out.println("Солдат успешно добавлен!");
+                System.out.println("Группа успешно добавлена!");
                 return true;
-            } else System.out.println("Значение группы меньше, чем значение наибольшего из солдат!");
+            } else System.out.println("Значение группы меньше, чем значение наибольшей из них!");
         } catch (IncorrectScriptException e) {
             System.err.println("Ошибка в скрипте");
         } catch (WrongArgumentException e) {

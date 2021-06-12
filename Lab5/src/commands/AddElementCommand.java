@@ -19,6 +19,7 @@ public class AddElementCommand extends GeneralCommand{
         try {
             if (!argument.isEmpty()) throw new WrongArgumentException();
             groupCollection.addToCollection(groupEnter.getStudyGroup(groupCollection.generateNextId()));
+            groupCollection.sort();
             System.out.println("Группа успешно добавлена");
             return true;
         } catch (IncorrectScriptException e) {
