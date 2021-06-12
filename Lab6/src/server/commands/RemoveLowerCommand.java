@@ -41,16 +41,14 @@ public class RemoveLowerCommand extends GeneralCommand {
             StudyGroup groupByValue = collectionManager.getByValue(group);
             if (groupByValue == null) throw new GroupNotFoundException();
             collectionManager.removeLower(groupByValue);
-            System.out.println("Группы успешно удалены!");
-            return null;
+            return new Response( CommandStatus.OK, "Группы успешно удалены!");
         }  catch (CollectionIsEmptyException exception) {
-            System.err.println("Коллекция пуста!");
+            return new Response( CommandStatus.ERROR, "Коллекция пуста!");
         } catch (GroupNotFoundException exception) {
-            System.err.println("Такой группы нет!");
+            return new Response( CommandStatus.ERROR, "Такой группы нет!");
         } catch (WrongArgumentException e) {
-            System.err.println("Неправильное использование: '" + getName() + "'");
+            return new Response( CommandStatus.ERROR, "Неправильное использование: '" + getName() + "'");
         }
-        return null;
 }
 }
 

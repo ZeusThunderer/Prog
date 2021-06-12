@@ -16,6 +16,7 @@ public class Client {
     private SocketChannel socketChannel;
     private ObjectOutputStream serverWriter;
     private ObjectInputStream serverReader;
+    private int attempts=5;
 
     public Client(String host , int port , UserHandler userHandler) {
         this.host = host;
@@ -32,7 +33,12 @@ public class Client {
                         break;
                     if (socketChannel != null) socketChannel.close();
                 } catch (ConnectException e) {
-                    System.err.println( "Будет произведена повторная попытка подключения" );
+                    if (attempts >0) {
+                        System.err.println( "Будет произведена повторная попытка подключения" );
+                        attempts--;
+                    }
+                    else
+                        break;
                     try {
                         Thread.sleep( 1000 );
                     } catch (InterruptedException interruptedException) {
@@ -81,7 +87,8 @@ public class Client {
     }
 
     private void sendRequest (Request request) throws IOException{
-                serverWriter.writeObject( request);
+        serverWriter.flush();
+        serverWriter.writeObject( request);
     }
 
     private void responseHandle(Response response, Request request) throws IOException{

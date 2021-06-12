@@ -84,13 +84,13 @@ public class Server {
             do {
                 userRequest = (Request) clientReader.readObject();
                 responseToUser = new Response(requestHandler.check( userRequest ));
-                if (responseToUser.getCommandStatus()!=null) {
+                 if (responseToUser.getCommandStatus()==CommandStatus.ERROR)
+                    responseToUser = new Response(CommandStatus.ERROR, "Несущетвующая команда, для списка команд введите help");
+                else if (responseToUser.getCommandStatus()!=null) {
                     clientWriter.writeObject( responseToUser );
                     clientWriter.flush();
                     userRequest = (Request) clientReader.readObject();
                 }
-                else if (responseToUser.getCommandStatus()==CommandStatus.ERROR)
-                    responseToUser = new Response(CommandStatus.ERROR, "Несущетвующая команда, для списка команд введите help");
                 else {
                     responseToUser = requestHandler.handle( userRequest );
                     System.out.println( "Запрос '" + userRequest.getCommandType() + "' успешно обработан." );

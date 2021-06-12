@@ -25,13 +25,11 @@ public class SumOfExStudentsCommand extends GeneralCommand{
             if (!request.isEmpty()) throw new WrongArgumentException();
             if (collectionManager.getStudyGroupSet().isEmpty()) throw new CollectionIsEmptyException();
             int sumStuds = collectionManager.getSumOfExStudents();
-            System.out.println("Сумма всех отчисленных студентов: " + sumStuds);
-            return null;
+            return new Response( CommandStatus.OK, "Сумма всех отчисленных студентов: " + sumStuds);
         } catch (WrongArgumentException e) {
-            System.err.println("Неправильное использование: '" + getName() + "'");
+            return new Response( CommandStatus.ERROR,"Неправильное использование: '" + getName() + "'");
         } catch (CollectionIsEmptyException exception) {
-            System.err.println("Коллекция пуста!");
+            return new Response( CommandStatus.ERROR,"Коллекция пуста!");
         }
-        return null;
     }
 }

@@ -24,11 +24,11 @@ public class AddIfMaxCommand extends GeneralCommand{
     @Override
     public Response execute(Request request) {
             Long id = (Long) request.getObject() ;
-           /* StudyGroup group = groupEnter.getStudyGroup();
+      /*     StudyGroup group = request.getObject();
             if (collectionManager.collectionSize() == 0 || group.compareTo( collectionManager.getFirst()) < 0) {
                 collectionManager.addToCollection(group);
                 return new Response( CommandStatus.OK,  "Группа успешно добавлена!");
-            } else return new Response( CommandStatus.OK,  "Значение группы меньше, чем значение наибольшего из солдат!");*/
+            } else return new Response( CommandStatus.OK,  "Значение группы меньше, чем значение наибольшей из коллекции !");*/
         return new Response( CommandStatus.OK,  "Группа успешно добавлена!");
     }
 }

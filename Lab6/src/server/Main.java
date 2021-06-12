@@ -33,6 +33,7 @@ public class Main {
         }
         CommandManager commandManager = new CommandManager(commands);
         Server server  = new Server( 28910,20000 , new RequestHandler( commandManager ) );
+        System.out.flush();
         server.run();
     }
 }
