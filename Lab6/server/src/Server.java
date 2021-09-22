@@ -100,7 +100,6 @@ public class Server {
                         Person person = (Person) clientReader.readObject();
                         userRequest.setObject( person );
                     }
-                    else
                     responseToUser = requestHandler.handle( userRequest );
                 }
                 else {

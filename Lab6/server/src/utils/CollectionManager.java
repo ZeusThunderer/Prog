@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.TreeSet;
 
 public class CollectionManager {
-    private LinkedHashSet<StudyGroup> studyGroupSet;
+    private LinkedHashSet<StudyGroup> studyGroupSet = new LinkedHashSet<>();
     private LocalDateTime lastInitTime;
     private LocalDateTime lastSaveTime;
     private FileManager fileManager;
@@ -50,6 +50,7 @@ public class CollectionManager {
     private void loadCollection() {
         studyGroupSet = fileManager.readCollection();
         lastInitTime = LocalDateTime.now();
+        if (studyGroupSet != null)
         sort();
     }
 
@@ -77,11 +78,13 @@ public class CollectionManager {
      * @return nex ID
      */
     public Long generateNextId() {
-        if (studyGroupSet.isEmpty()) return 1L;
+        if (studyGroupSet == null) return 1L;
         return this.getLast().getId() +1;
     }
 
     public void addToCollection(StudyGroup studyGroup) {
+        if (studyGroupSet == null)
+            studyGroupSet= new LinkedHashSet<>();
         studyGroupSet.add(studyGroup);
     }
 

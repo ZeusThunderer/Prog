@@ -1,3 +1,4 @@
+import exchange.CommandStatus;
 import utils.UserHandler;
 import exchange.Request;
 import exchange.Response;
@@ -73,7 +74,12 @@ public class Client {
                 if (request.getCommandType().equals( "exit" ))
                     return false;
                 sendRequest( request );
-                responseHandle( (Response) serverReader.readObject(), request );
+                response = (Response) serverReader.readObject();
+                responseHandle( response, request );
+                if (response.getCommandStatus() == CommandStatus.NEED_GROUP || response.getCommandStatus() == CommandStatus.NEED_PERSON) {
+                    response = (Response) serverReader.readObject();
+                    responseHandle(response, request);
+                }
             } catch (InvalidClassException | NotSerializableException exception) {
                 System.err.println("Произошла ошибка при отправке данных на сервер!");
             } catch (ClassNotFoundException e) {
