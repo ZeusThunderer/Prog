@@ -1,20 +1,15 @@
-import utils.FileManager;
 import utils.CollectionManager;
 import commands.*;
-import utils.RequestHandler;
 
-import java.util.HashMap;
-
+import java.sql.SQLException;
 
 
 public class Main {
-    public static void main(String[] args){
-
+    public static void main(String[] args) throws SQLException {
         final String envVariable = "JAVA_PATH";
-        FileManager fileManager = new FileManager(envVariable);
-        CollectionManager collectionManager = new CollectionManager(fileManager);
+        CollectionManager collectionManager = new CollectionManager();
         CommandManager commandManager = new CommandManager(collectionManager);
-        Server server  = new Server( 28910,20000 , new RequestHandler( commandManager ) );
+        Server server  = new Server( 28910,120000 , commandManager);
         System.out.flush();
         server.run();
     }

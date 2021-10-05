@@ -33,19 +33,13 @@ public class RemoveLowerCommand extends GeneralCommand {
     @Override
     public Response execute(Request request) {
         try {
-            if (!request.isEmpty()) throw new WrongArgumentException();
             if (collectionManager.collectionSize() == 0) throw new CollectionIsEmptyException();
-            StudyGroup group =  new StudyGroup(collectionManager.generateNextId(),(RawGroup) request.getObject());
-            StudyGroup groupByValue = collectionManager.getByValue(group);
-            if (groupByValue == null) throw new GroupNotFoundException();
-            collectionManager.removeLower(groupByValue);
+            collectionManager.removeLower(request);
             return new Response( CommandStatus.OK, "Группы успешно удалены!");
         }  catch (CollectionIsEmptyException exception) {
             return new Response( CommandStatus.ERROR, "Коллекция пуста!");
         } catch (GroupNotFoundException exception) {
             return new Response( CommandStatus.ERROR, "Такой группы нет!");
-        } catch (WrongArgumentException e) {
-            return new Response( CommandStatus.ERROR, "Неправильное использование: '" + getName() + "'");
         }
 }
 }

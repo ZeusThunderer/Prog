@@ -11,6 +11,7 @@ import utils.CollectionManager;
 
 public class UpdateIdCommand extends GeneralCommand{
     private CollectionManager collectionManager;
+    boolean needUpdated;
     public UpdateIdCommand(CollectionManager collectionManager ) {
         super("update id {element} ", " обновить значение элемента коллекции, id которого равен заданному");
         this.collectionManager = collectionManager;
@@ -18,7 +19,7 @@ public class UpdateIdCommand extends GeneralCommand{
 
     @Override
     public CommandStatus whatNeeded() {
-        return null;
+        return CommandStatus.UPDATE;
     }
 
     /**
@@ -31,7 +32,7 @@ public class UpdateIdCommand extends GeneralCommand{
         try {
             if (request.getObject() == null) throw new WrongArgumentException();
             if (collectionManager.collectionSize() == 0) throw new CollectionIsEmptyException();
-            Long id = Long.parseLong( (String) request.getObject());
+            int id = Integer.parseInt( (String) request.getObject());
             StudyGroup oldGroup = collectionManager.getById(id);
             if (oldGroup == null) throw new GroupNotFoundException();
            /* collectionManager.updateById(oldGroup);*/

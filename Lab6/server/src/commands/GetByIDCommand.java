@@ -28,7 +28,7 @@ public class GetByIDCommand extends GeneralCommand{
     public Response execute(Request request) {
         try {
             if (request.getObject() == "") throw new WrongArgumentException();
-            Long id = Long.valueOf( ((String) request.getObject()));
+            int id = Integer.valueOf( ((String) request.getObject()));
             for (StudyGroup studyGroup : collectionManager.getStudyGroupSet()) {
                 if (studyGroup.getId() == id)
                     return new Response( CommandStatus.OK , collectionManager.getById( id ).toString() );

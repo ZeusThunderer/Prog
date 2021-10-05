@@ -1,6 +1,7 @@
 package stdgroup.enums;
 
 public enum EyeColor {
+        RED,
         BLUE,
         YELLOW,
         WHITE;

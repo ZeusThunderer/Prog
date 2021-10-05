@@ -22,7 +22,7 @@ public class CountGreaterAdminCommand extends GeneralCommand{
     @Override
     public Response execute(Request request) {
             int counter = 0;
-           Person person = (Person) request.getObject();
+           Person person = request.getPerson();
            for (StudyGroup studyGroup : collectionManager.getStudyGroupSet())
                 if (studyGroup.getGroupAdmin().compare(person))
                     counter++;

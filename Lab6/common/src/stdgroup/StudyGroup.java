@@ -12,17 +12,18 @@ import java.util.Objects;
  */
 
 public class StudyGroup implements Comparable<StudyGroup>, Serializable {
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private int id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
     private java.time.LocalDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
-    private Long studentsCount; //Значение поля должно быть больше 0, Поле может быть null
+    private int studentsCount; //Значение поля должно быть больше 0, Поле может быть null
     private int expelledStudents; //Значение поля должно быть больше 0
     private Float averageMark; //Значение поля должно быть больше 0, Поле не может быть null
     private Semester semesterEnum; //Поле не может быть null
     private Person groupAdmin; //Поле может быть null
+    private String owner;
 
-    public StudyGroup(Long id,String name, Coordinates coordinates, LocalDateTime creationDate, Long studentsCount, int expelledStudents, Float averageMark, Semester semesterEnum, Person groupAdmin) {
+    public StudyGroup(int id, String name, Coordinates coordinates, LocalDateTime creationDate, int studentsCount, int expelledStudents, Float averageMark, Semester semesterEnum, Person groupAdmin) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -33,8 +34,20 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
         this.semesterEnum = semesterEnum;
         this.groupAdmin = groupAdmin;
     }
+    public StudyGroup(int id, String name, Coordinates coordinates, LocalDateTime creationDate, int studentsCount, int expelledStudents, Float averageMark, Semester semesterEnum, Person groupAdmin, String owner) {
+        this.id = id;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.creationDate = creationDate;
+        this.studentsCount = studentsCount;
+        this.expelledStudents = expelledStudents;
+        this.averageMark = averageMark;
+        this.semesterEnum = semesterEnum;
+        this.groupAdmin = groupAdmin;
+        this.owner = owner;
+    }
 
-    public StudyGroup(Long id , RawGroup group) {
+    public StudyGroup(int id , RawGroup group) {
         this.id = id;
         this.name = group.getName();
         this.coordinates = group.getCoordinates();
@@ -45,11 +58,22 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
         this.semesterEnum = group.getSemesterEnum();
         this.groupAdmin = group.getGroupAdmin();
     }
+    public StudyGroup(int id ,LocalDateTime time, RawGroup group) {
+        this.id = id;
+        this.name = group.getName();
+        this.coordinates = group.getCoordinates();
+        this.creationDate = time;
+        this.studentsCount = group.getStudentsCount();
+        this.expelledStudents = group.getExpelledStudents();
+        this.averageMark = group.getAverageMark();
+        this.semesterEnum = group.getSemesterEnum();
+        this.groupAdmin = group.getGroupAdmin();
+    }
 
     /**
      * @return ID of the group.
      */
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
@@ -77,7 +101,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     /**
      * @return Students count.
      */
-    public Long getStudentsCount() {
+    public int getStudentsCount() {
         return studentsCount;
     }
     /**
@@ -135,7 +159,8 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
                 "\nЧисло отчислившихся студентов: " + expelledStudents +
                 "\nСредний балл: " + averageMark +
                 "\nНомер семестра: " + semesterEnum +
-                "\nАдмин группы:\n" + groupAdmin + '\n';
+                "\nАдмин группы:\n" + groupAdmin  +
+                "\nСоздатель объекта: " + owner +'\n';
     }
 
     /**
@@ -144,7 +169,14 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
      * @return result of comparision
      */
     public int compareTo(StudyGroup studyGroup){
-        return this.studentsCount.intValue() - studyGroup.getStudentsCount().intValue();
+        return this.studentsCount - studyGroup.getStudentsCount();
     }
 
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
 }

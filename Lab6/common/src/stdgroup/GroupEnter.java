@@ -11,6 +11,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.NoSuchElementException;
 
@@ -46,7 +47,7 @@ public class GroupEnter {
     }
 
     /**
-     * Sets mode to 'User Mode'.
+     * Sets mode to 'exchange.User Mode'.
      */
     public void setUserMode() {
         fileMode = false;
@@ -132,12 +133,12 @@ public class GroupEnter {
     /**
      * @return Students Count
      */
-    public Long getStudentsCount() {
-        long studentsCount;
+    public int getStudentsCount() {
+        int studentsCount;
         while (true) {
             try {
                 System.out.println("Введите количество студентов: ");
-                studentsCount = Long.parseLong( read() );
+                studentsCount = Integer.parseInt( read() );
                 if (studentsCount <= MIN_STUDENTSCOUNT) throw new WrongLimitsException();
                 return studentsCount;
             } catch (NumberFormatException e){
@@ -215,7 +216,7 @@ public class GroupEnter {
             try {
                 System.out.println("Введите дату рождения админа группы: ");
                 System.out.println("Формат даты - дд/мм/гггг");
-                return new SimpleDateFormat("dd/MM/yyyy").parse(read());
+                return new SimpleDateFormat("dd/MM/YYYY").parse(read());
             }
             catch (ParseException e) {
                 System.err.println("Неправильный формат даты");
@@ -286,9 +287,8 @@ public class GroupEnter {
         System.out.println("Введите учебную группу");
         return new RawGroup(getName(),getCoordinates(), getStudentsCount(),getExpelledStudents(),getAverageMark(),getSemester(),getGroupAdmin());
     }
-
-    public boolean change(String s)  {
-        String finalQuestion = s + "? (да , нет)";
+    public boolean askChange(String s)  {
+        String finalQuestion =s+ "? (да , нет)";
         String answer;
         while (true) {
             try {
@@ -303,6 +303,35 @@ public class GroupEnter {
 
             }
         }
+    }
+    public StudyGroup change(StudyGroup oldGroup)  {
+        String name = oldGroup.getName();
+        Coordinates coordinates = oldGroup.getCoordinates();
+        LocalDateTime creationDate = oldGroup.getCreationDate();
+        int studensCount = oldGroup.getStudentsCount();
+        int expelledStudents = oldGroup.getExpelledStudents();
+        Float averageMark = oldGroup.getAverageMark();
+        Semester semester = oldGroup.getSemesterEnum();
+        Person groupAdmin = oldGroup.getGroupAdmin();
+        
+        if (askChange("Хотите изменить имя группы?")) name = getName();
+        if (askChange("Хотите изменить координаты группы?")) coordinates = getCoordinates();
+        if (askChange("Хотите изменить кол-во студентов?")) studensCount = getStudentsCount();
+        if (askChange("Хотите изменить кол-во отчисленных студентов?")) expelledStudents = getExpelledStudents();
+        if (askChange("Хотите изменить среднюю оценку")) averageMark = getAverageMark();
+        if (askChange("Хотите изменить семестр?")) semester = getSemester();
+        if (askChange("Хотите изменить админа группы?")) groupAdmin = getGroupAdmin();
+        return new StudyGroup(
+                oldGroup.getId(),
+                name,
+                coordinates,
+                creationDate,
+                studensCount,
+                expelledStudents,
+                averageMark,
+                semester,
+                groupAdmin
+        );
     }
 
 

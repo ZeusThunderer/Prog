@@ -24,7 +24,7 @@ public class AddIfMaxCommand extends GeneralCommand{
             long max = 0;
             RawGroup group = (RawGroup) request.getObject();
             if (collectionManager.collectionSize() == 0) {
-                collectionManager.addToCollection( new StudyGroup(collectionManager.generateNextId(), group ));
+                collectionManager.addToCollection(request);
                 return new Response( CommandStatus.OK,  "Группа успешно добавлена!");
             }
             else {
@@ -33,7 +33,7 @@ public class AddIfMaxCommand extends GeneralCommand{
                         max = studyGroup.getStudentsCount();
                 }
                 if (group.getStudentsCount() > max) {
-                    collectionManager.addToCollection( new StudyGroup(collectionManager.generateNextId(), group ));
+                    collectionManager.addToCollection( request );
                     return new Response( CommandStatus.OK , "Группа успешно добавлена!" );
                 }
                 else

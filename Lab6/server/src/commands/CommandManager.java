@@ -36,9 +36,14 @@ public class CommandManager {
     }
 
 
+    public CollectionManager getCollectionManager() {
+        return collectionManager;
+    }
+
     /**
      * @return List of manager's server.commands.
      */
+
     public HashMap<String,Command> getCommands() {
         return commands;
     }

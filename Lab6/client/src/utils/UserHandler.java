@@ -23,7 +23,7 @@ public class UserHandler {
      */
     public Request handle()  {
         String[] userCommand = {"", ""};
-        Request request;
+        Request request = null;
         do {
             System.out.print('>');
             userCommand[1] = "";
@@ -33,8 +33,8 @@ public class UserHandler {
             else
                 userCommand[0] = str;
             userCommand[1] = userCommand[1].trim();
-            request = new Request( userCommand[0] );
-            request.setObject( userCommand[1] );
+           request = new Request(userCommand[0]);
+           request.setObject( userCommand[1] );
         } while (request.getCommandType().equals( "" ));
         return request;
     }

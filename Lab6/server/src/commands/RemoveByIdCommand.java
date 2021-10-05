@@ -30,10 +30,10 @@ public class RemoveByIdCommand extends GeneralCommand{
     public Response execute(Request request) {
         try {
             if (collectionManager.collectionSize() == 0) throw new CollectionIsEmptyException();
-            Long id = (Long) request.getObject();
+            int id = Integer.valueOf((String) request.getObject());
             StudyGroup groupToRemove = collectionManager.getById(id);
             if (groupToRemove == null) throw new GroupNotFoundException();
-            collectionManager.removeFromCollection(groupToRemove);
+            collectionManager.removeFromCollection(groupToRemove,request);
             System.out.println("Группа успешно удалена!");
             return new Response( CommandStatus.OK, "Группа успешно удалена!" );
         }catch (CollectionIsEmptyException exception) {

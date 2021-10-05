@@ -1,41 +1,45 @@
+import commands.CommandManager;
 import exchange.CommandStatus;
 import exchange.Request;
 import exchange.Response;
 
-import stdgroup.Person;
-import stdgroup.RawGroup;
-import utils.RequestHandler;
+import utils.ClientHandler;
+import utils.ConnectionHandler;
 
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.*;
 
 
 public class Server {
     private int port;
     private int soTimeout;
     private ServerSocket serverSocket;
-    private RequestHandler requestHandler;
+    private CommandManager commandManager;
+    private ConnectionHandler connectionHandler;
+    private final ExecutorService clientsThreads = Executors.newFixedThreadPool(5);
 
-    public Server(int port, int soTimeout, RequestHandler requestHandler) {
+    public Server(int port, int soTimeout, CommandManager commandManager) {
         this.port = port;
         this.soTimeout = soTimeout;
-        this.requestHandler = requestHandler;
+        this.commandManager = commandManager;
     }
 
     /**
      * Begins server operation.
      */
     public void run() {
-            openServerSocket();
-            boolean processingStatus = true;
-            while (processingStatus) {
-                try (Socket clientSocket = connectToClient()) {
-                    processingStatus = processClientRequest(clientSocket);
-                } catch (SocketTimeoutException exception) {
+        openServerSocket();
+        while (true){
+                try {
+                    clientsThreads.submit( new ClientHandler( connectToClient() , connectionHandler,commandManager ) );
+                } catch (SocketTimeoutException e) {
+                    System.out.println("Время ожидания подключения истекло");
                     break;
-                } catch (IOException exception) {
-                    System.err.println("Произошла ошибка при попытке завершить соединение с клиентом!");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
             }
             stop();
     }
@@ -58,6 +62,8 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             serverSocket.setSoTimeout(soTimeout);
+            connectionHandler = new ConnectionHandler( serverSocket );
+            System.out.println("порт " + port + " открыт");
             System.out.println("сервер поднят");
         } catch (IllegalArgumentException exception) {
             System.err.println("Порт '" + port + "' находится за пределами возможных значений!");
@@ -74,55 +80,4 @@ public class Server {
         return clientSocket;
     }
 
-    /**
-     * The process of receiving a request from a client.
-     */
-    private boolean processClientRequest(Socket clientSocket) {
-        Request userRequest = null;
-        Response responseToUser = null;
-        try (ObjectInputStream clientReader = new ObjectInputStream(clientSocket.getInputStream());
-             ObjectOutputStream clientWriter = new ObjectOutputStream(clientSocket.getOutputStream())) {
-            do {
-                userRequest = (Request) clientReader.readObject();
-                System.out.println(userRequest.getCommandType());
-                responseToUser = new Response(requestHandler.check( userRequest ));
-                if (responseToUser.getCommandStatus()==CommandStatus.ERROR)
-                    responseToUser = new Response(CommandStatus.ERROR, "Несущетвующая команда, для списка команд введите help");
-                else if (responseToUser.getCommandStatus()!=null) {
-                    clientWriter.writeObject( responseToUser );
-                    clientWriter.flush();
-                    /*userRequest = (Request) clientReader.readObject();*/
-                    if (responseToUser.getCommandStatus() == CommandStatus.NEED_GROUP) {
-                        RawGroup rawGroup = (RawGroup) clientReader.readObject();
-                        userRequest.setObject( rawGroup );
-                    }
-                    else if (responseToUser.getCommandStatus() == CommandStatus.NEED_PERSON) {
-                        Person person = (Person) clientReader.readObject();
-                        userRequest.setObject( person );
-                    }
-                    responseToUser = requestHandler.handle( userRequest );
-                }
-                else {
-                    responseToUser = requestHandler.handle( userRequest );
-                    System.out.println( "Запрос '" + userRequest.getCommandType() + "' успешно обработан." );
-                }
-               clientWriter.writeObject(responseToUser);
-                clientWriter.flush();
-
-            } while (responseToUser.getCommandStatus() != CommandStatus.EXIT);
-            return false;
-        } catch (ClassNotFoundException exception) {
-            System.err.println("Произошла ошибка при чтении полученных данных!");
-        } catch (InvalidClassException | NotSerializableException exception) {
-            System.err.println("Произошла ошибка при отправке данных на клиент!");
-        } catch (IOException exception) {
-            if (userRequest == null) {
-                System.err.println("Непредвиденный разрыв соединения с клиентом!");
-            } else {
-                System.out.println("Клиент успешно отключен от сервера!");
-                requestHandler.getCommandManager().save();
-            }
-        }
-        return true;
-    }
 }

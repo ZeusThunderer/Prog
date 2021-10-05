@@ -24,6 +24,46 @@ public class Person implements Serializable {
         this.nationality = nationality;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public EyeColor getEyeColor() {
+        return eyeColor;
+    }
+
+    public void setEyeColor(EyeColor eyeColor) {
+        this.eyeColor = eyeColor;
+    }
+
+    public HairColor getHairColor() {
+        return hairColor;
+    }
+
+    public void setHairColor(HairColor hairColor) {
+        this.hairColor = hairColor;
+    }
+
+    public Country getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Country nationality) {
+        this.nationality = nationality;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,7 +79,7 @@ public class Person implements Serializable {
     /**
      * @param person
      * @returnb true if this person born later than param person
-     */
+     * */
     public boolean compare(Person person){
         if (person.birthday.before(this.birthday))
             return true;

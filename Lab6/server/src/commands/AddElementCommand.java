@@ -21,7 +21,7 @@ public class AddElementCommand extends GeneralCommand{
 
     @Override
     public Response execute(Request request) {
-            collectionManager.addToCollection(new StudyGroup(collectionManager.generateNextId(),(RawGroup) request.getObject()));
+            collectionManager.addToCollection(request);
             return new Response( CommandStatus.OK, "Группа успешно добавлена" );
     }
 }

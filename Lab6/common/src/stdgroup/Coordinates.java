@@ -7,6 +7,22 @@ public class Coordinates implements Serializable {
     private Integer x; //Максимальное значение поля: 806, Поле не может быть null
     private Integer y; //Поле не может быть null
 
+    public Integer getY() {
+        return y;
+    }
+
+    public void setY(Integer y) {
+        this.y = y;
+    }
+
+    public Integer getX() {
+        return x;
+    }
+
+    public void setX(Integer x) {
+        this.x = x;
+    }
+
     public Coordinates(Integer x, Integer y) {
         this.x = x;
         this.y = y;

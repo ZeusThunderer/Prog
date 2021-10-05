@@ -5,31 +5,34 @@ import exchange.Request;
 import exchange.Response;
 import commands.CommandManager;
 
-public class RequestHandler {
-        private CommandManager commandManager;
-        private CollectionManager manager;
+import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
-        public RequestHandler(CommandManager commandManager) {
-            this.commandManager = commandManager;
-        }
+public class RequestHandler implements Callable<Response> {
+    private CommandManager commandManager;
+    private Request request;
 
-        /**
-         * Handles requests.
-         *
-         * @param request Request to be processed.
-         * @return Response to request.
-         */
-        public Response handle(Request request) {
-            return commandManager.getCommands().get( request.getCommandType() ).execute( request );
-        }
+    public RequestHandler(CommandManager commandManager, Request request) {
+        this.commandManager = commandManager;
+        this.request = request;
+    }
+
+    /**
+     * Handles requests.
+     *
+     * @param request Request to be processed.
+     * @return Response to request.
+     */
+    public Response handle(Request request) {
+        return commandManager.getCommands().get( request.getCommandType() ).execute( request );
+    }
 
     public CommandManager getCommandManager() {
         return commandManager;
     }
-
-    public CommandStatus check(Request request) {
-            if (commandManager.getCommands().containsKey( request.getCommandType()))
-            return commandManager.getCommands().get( request.getCommandType() ).whatNeeded();
-            else return CommandStatus.ERROR;
-        }
+    @Override
+    public Response call() throws Exception {
+        return commandManager.getCommands().get( request.getCommandType() ).execute( request );
     }
+}

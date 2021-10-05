@@ -1,4 +1,7 @@
 import exchange.CommandStatus;
+import exchange.User;
+import org.w3c.dom.ls.LSOutput;
+import stdgroup.GroupEnter;
 import utils.UserHandler;
 import exchange.Request;
 import exchange.Response;
@@ -14,10 +17,11 @@ public class Client {
     private String host;
     private int port;
     private UserHandler userHandler;
+    private User user;
     private SocketChannel socketChannel;
     private ObjectOutputStream serverWriter;
     private ObjectInputStream serverReader;
-    private int attempts=5;
+    private int attempts=10;
 
     public Client(String host , int port , UserHandler userHandler) {
         this.host = host;
@@ -30,6 +34,7 @@ public class Client {
             while (true) {
                 try {
                     connectToServer();
+                    logging();
                     if (!execution())
                         break;
                     if (socketChannel != null) socketChannel.close();
@@ -44,11 +49,43 @@ public class Client {
                         Thread.sleep( 1000 );
                     } catch (InterruptedException interruptedException) {
                     }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
             System.out.println( "Работа клиента завершена." );
-        } catch (IOException e) {
+        }  catch (IOException e) {
         }
+    }
+
+    private void logging() throws IOException, ClassNotFoundException {
+        Response response;
+        do {
+            System.out.println( "Войти или создать новый аккаунт? (log или reg)" );
+            String login, pass;
+            boolean newUser;
+            loop:
+            do {
+                switch (userHandler.getGroupEnter().read()) {
+                    case "log":
+                        newUser = false;
+                        break loop;
+                    case "reg":
+                        newUser = true;
+                        break loop;
+                    default:
+                        System.out.println( "Неверная команда" );
+                }
+            } while (true);
+            System.out.println( "Введите логин" );
+            login = userHandler.getGroupEnter().read();
+            System.out.println( "Введите пароль" );
+            pass = userHandler.getGroupEnter().read();
+            user = new User( login , pass , newUser );
+            serverWriter.writeObject( new Request( newUser , user ) );
+            response = (Response) serverReader.readObject();
+            System.out.println(response.getResponse());
+        } while (response.getCommandStatus() != CommandStatus.LOGGED);
     }
 
     private void connectToServer() throws ConnectException {
@@ -71,6 +108,7 @@ public class Client {
         while (true){
             try {
                 request = userHandler.handle();
+                request.setUser( user );
                 if (request.getCommandType().equals( "exit" ))
                     return false;
                 sendRequest( request );
@@ -92,10 +130,9 @@ public class Client {
         }
     }
 
-    private void sendRequest (Serializable request) throws IOException{
-        serverWriter.flush();
+    private void sendRequest (Request request) throws IOException{
+        serverWriter.reset();
         serverWriter.writeObject(request);
-        serverWriter.flush();
     }
 
     private void responseHandle(Response response, Request request) throws IOException{
@@ -104,12 +141,16 @@ public class Client {
                 System.out.println( response.getResponse() );
                 break;
             case NEED_GROUP:
-                request.setObject( userHandler.getGroupEnter().getStudyGroup() );
-                sendRequest( request.getObject() );
+                request.setRawGroup( userHandler.getGroupEnter().getStudyGroup() );
+                sendRequest( request);
                 break;
             case NEED_PERSON:
-                request.setObject( userHandler.getGroupEnter().getGroupAdmin() );
-                sendRequest( request.getObject() );
+                request.setPerson( userHandler.getGroupEnter().getGroupAdmin() );
+                sendRequest( request );
+                break;
+            case UPDATE:
+                request.setUpdedGroup( userHandler.getGroupEnter().change(response.getUpdGroup()) );
+                sendRequest( request );
                 break;
             case ERROR:
                 System.err.println( response.getResponse() );

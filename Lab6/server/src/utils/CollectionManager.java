@@ -1,5 +1,9 @@
 package utils;
 
+import exception.GroupNotFoundException;
+import exception.NoDataException;
+import exception.NoSuchStatementException;
+import exchange.Request;
 import stdgroup.Coordinates;
 import stdgroup.GroupEnter;
 import stdgroup.Person;
@@ -7,40 +11,32 @@ import stdgroup.StudyGroup;
 import stdgroup.enums.Semester;
 
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.TreeSet;
+
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CollectionManager {
     private LinkedHashSet<StudyGroup> studyGroupSet = new LinkedHashSet<>();
     private LocalDateTime lastInitTime;
     private LocalDateTime lastSaveTime;
-    private FileManager fileManager;
-    public CollectionManager(FileManager fileManager){
+    private DBManager dbManager;
+    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+
+    public CollectionManager() throws SQLException {
         this.lastInitTime = null;
         this.lastSaveTime = null;
-        this.fileManager = fileManager;
+        dbManager = new DBManager();
         this.loadCollection();
-    }
-
-    /**
-     * sort studyGroupSet
-     */
-    public void sort(){
-        TreeSet<StudyGroup> presort = new TreeSet<>(studyGroupSet);
-        studyGroupSet = new LinkedHashSet<>();
-        for (StudyGroup sg : presort){
-            studyGroupSet.add(sg);
-        }
     }
 
     /**
      * Saves the collection to file.
      */
     public void saveCollection() {
-        fileManager.writeCollection(studyGroupSet);
         lastSaveTime = LocalDateTime.now();
     }
 
@@ -48,14 +44,15 @@ public class CollectionManager {
      * Loads the collection from file.
      */
     private void loadCollection() {
-        studyGroupSet = fileManager.readCollection();
-        lastInitTime = LocalDateTime.now();
-        if (studyGroupSet != null)
-        sort();
-    }
-
-    public FileManager getFileManager() {
-        return fileManager;
+        lock.writeLock().lock();
+        try {
+            dbManager.load( studyGroupSet );
+            lastInitTime = LocalDateTime.now();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     /**
@@ -64,36 +61,27 @@ public class CollectionManager {
     public LinkedHashSet<StudyGroup> getStudyGroupSet() {
         return studyGroupSet;
     }
-    public StudyGroup getFirst() {
-        if (studyGroupSet.isEmpty()) return null;
-        return (StudyGroup) studyGroupSet.toArray()[0];
-    }
-    public StudyGroup getLast() {
-        if (studyGroupSet.isEmpty()) return null;
-        return (StudyGroup) studyGroupSet.toArray()[studyGroupSet.size()-1];
-    }
 
     /**
      * generate next ID
      * @return nex ID
      */
-    public Long generateNextId() {
+    /*public int generateNextId() {
         if (studyGroupSet == null) return 1L;
         return this.getLast().getId() +1;
-    }
-
-    public void addToCollection(StudyGroup studyGroup) {
-        if (studyGroupSet == null)
-            studyGroupSet= new LinkedHashSet<>();
-        studyGroupSet.add(studyGroup);
-    }
-
-    public LocalDateTime getLastInitTime() {
-        return lastInitTime;
-    }
-
-    public LocalDateTime getLastSaveTime() {
-        return lastSaveTime;
+    }*/
+    public void addToCollection(Request request) {
+        lock.writeLock().lock();
+        try {
+            studyGroupSet.add( dbManager.add( request ) );
+            saveCollection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (NoDataException e) {
+            e.printStackTrace();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public String collectionType() {
@@ -101,22 +89,52 @@ public class CollectionManager {
     }
 
     public int collectionSize() {
-        return studyGroupSet.size();
+        lock.readLock().lock();
+        try {
+            return studyGroupSet.size();
+        } finally {
+            lock.readLock().unlock();
+        }
     }
 
-    public StudyGroup getById(Long id) {
-        for (StudyGroup group : studyGroupSet){
-            if (group.getId().equals(id)) return  group;
+    public StudyGroup getById(int id) {
+
+        try {
+            for (StudyGroup group : studyGroupSet) {
+                if (group.getId() == id) return group;
+            }
+        } finally {
+
         }
         return null;
     }
 
-    public void removeFromCollection(StudyGroup groupToRemove) {
-        studyGroupSet.remove(groupToRemove);
+    public void removeFromCollection(StudyGroup studyGroup, Request request) {
+        lock.writeLock().lock();
+        try {
+            dbManager.remove( request );
+            studyGroupSet.remove( studyGroup );
+            saveCollection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (NoSuchStatementException e) {
+            e.printStackTrace();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public void clearCollection() {
-        studyGroupSet.clear();
+        lock.writeLock().lock();
+        try {
+            dbManager.clear();
+            studyGroupSet.clear();
+            saveCollection();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public StudyGroup getByValue(StudyGroup groupToFind) {
@@ -126,12 +144,12 @@ public class CollectionManager {
         return null;
     }
 
-    public void removeGreater(StudyGroup groupByValue) {
-        studyGroupSet.removeIf(group -> group.compareTo(groupByValue) > 0);
+    public void removeGreater(Request request) throws GroupNotFoundException{
+        studyGroupSet.removeIf(group -> group.compareTo(request.getUpdedGroup()) > 0);
     }
 
-    public void removeLower(StudyGroup groupByValue) {
-        studyGroupSet.removeIf(group -> group.compareTo(groupByValue) < 0);
+    public void removeLower(Request request) throws GroupNotFoundException {
+        studyGroupSet.removeIf(group -> group.compareTo(request.getUpdedGroup()) < 0);
     }
 
     public int getSumOfExStudents() {
@@ -148,24 +166,27 @@ public class CollectionManager {
         CollectionManager that = (CollectionManager) o;
         return studyGroupSet.equals(that.studyGroupSet) &&
                 lastInitTime.equals(that.lastInitTime) &&
-                lastSaveTime.equals(that.lastSaveTime) &&
-                fileManager.equals(that.fileManager);
+                lastSaveTime.equals(that.lastSaveTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studyGroupSet, lastInitTime, lastSaveTime, fileManager);
+        return Objects.hash(studyGroupSet, lastInitTime, lastSaveTime);
     }
 
     @Override
     public String toString() {
-        String str = "";
-        for (StudyGroup stg : studyGroupSet){
-            str +=stg.toString();
+        lock.readLock().lock();
+        try {
+            String str = "";
+            for (StudyGroup stg : studyGroupSet){
+                str +=stg.toString();
+            }
+            return str;
+        } finally {
+            lock.readLock().unlock();
         }
-        return str;
     }
-
     public String info() {
         LocalDateTime lastInitTime = this.lastInitTime;
         String lastInitTimeString = (lastInitTime == null) ? "в данной сессии инициализации еще не происходило" :
@@ -181,35 +202,22 @@ public class CollectionManager {
                 "\nДата последней инициализации: " + lastInitTimeString;
     }
 
-    public void updateById(StudyGroup oldGroup , GroupEnter groupEnter) {
-        String name = oldGroup.getName();
-        Coordinates coordinates = oldGroup.getCoordinates();
-        LocalDateTime creationDate = oldGroup.getCreationDate();
-        Long studensCount = oldGroup.getStudentsCount();
-        int expelledStudents = oldGroup.getExpelledStudents();
-        Float averageMark = oldGroup.getAverageMark();
-        Semester semester = oldGroup.getSemesterEnum();
-        Person groupAdmin = oldGroup.getGroupAdmin();
+    public void updateById(Request request) {
+        lock.writeLock().lock();
+        try {
+            dbManager.update(request);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (NoDataException e) {
+            e.printStackTrace();
+        } catch (NoSuchStatementException e) {
+            e.printStackTrace();
+        } finally {
 
-        this.removeFromCollection(oldGroup);
+        } lock.readLock().lock();
+    }
 
-        if (groupEnter.change("Хотите изменить имя группы?")) name = groupEnter.getName();
-        if (groupEnter.change("Хотите изменить координаты группы?")) coordinates = groupEnter.getCoordinates();
-        if (groupEnter.change("Хотите изменить кол-во студентов?")) studensCount = groupEnter.getStudentsCount();
-        if (groupEnter.change("Хотите изменить кол-во отчисленных студентов?")) expelledStudents = groupEnter.getExpelledStudents();
-        if (groupEnter.change("Хотите изменить среднюю оценку")) averageMark = groupEnter.getAverageMark();
-        if (groupEnter.change("Хотите изменить семестр?")) semester = groupEnter.getSemester();
-        if (groupEnter.change("Хотите изменить админа группы?")) groupAdmin = groupEnter.getGroupAdmin();
-        this.addToCollection(new StudyGroup(
-                oldGroup.getId(),
-                name,
-                coordinates,
-                creationDate,
-                studensCount,
-                expelledStudents,
-                averageMark,
-                semester,
-                groupAdmin
-        ));
+    public DBManager getDbManager() {
+        return dbManager;
     }
 }
