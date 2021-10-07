@@ -3,13 +3,11 @@ package utils;
 import exchange.CommandStatus;
 import exchange.Response;
 import exchange.User;
-import stdgroup.StudyGroup;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Set;
 
 public class AuthManager {
     DBManager dbManager;
@@ -18,12 +16,10 @@ public class AuthManager {
     }
 
     public Response checkUser(User user){
-        CommandStatus cmd = null;
+        CommandStatus cmd;
         try {
             cmd = dbManager.check(user);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+
         String str = "Пользователь авторизирован" ;
         if (cmd == CommandStatus.WRONG_USERNAME && user.isNewUser())
             str = "Пользователь с таким ником уже существует";
@@ -32,6 +28,10 @@ public class AuthManager {
         else if (cmd == CommandStatus.WRONG_PASSWORD)
             str = "Неверный логин или пароль";
         return new Response( cmd, str );
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
     public String hashPassword(String password) {
         try {

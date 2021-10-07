@@ -4,32 +4,25 @@ import exception.GroupNotFoundException;
 import exception.NoDataException;
 import exception.NoSuchStatementException;
 import exchange.Request;
-import stdgroup.Coordinates;
-import stdgroup.GroupEnter;
-import stdgroup.Person;
 import stdgroup.StudyGroup;
-import stdgroup.enums.Semester;
-
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.Objects;
-
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CollectionManager {
     private LinkedHashSet<StudyGroup> studyGroupSet = new LinkedHashSet<>();
     private LocalDateTime lastInitTime;
     private LocalDateTime lastSaveTime;
-    private DBManager dbManager;
+    private DBManager dbManager = new DBManager();
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     public CollectionManager() throws SQLException {
         this.lastInitTime = null;
         this.lastSaveTime = null;
-        dbManager = new DBManager();
         this.loadCollection();
     }
 
@@ -74,8 +67,7 @@ public class CollectionManager {
         lock.writeLock().lock();
         try {
             studyGroupSet.add( dbManager.add( request ) );
-            saveCollection();
-        } catch (SQLException throwables) {
+            saveCollection(); } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (NoDataException e) {
             e.printStackTrace();

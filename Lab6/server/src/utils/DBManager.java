@@ -4,7 +4,6 @@ import exception.NoDataException;
 import exception.NoSuchStatementException;
 import exchange.CommandStatus;
 import exchange.Request;
-import exchange.Response;
 import exchange.User;
 import stdgroup.Coordinates;
 import stdgroup.Person;
@@ -15,14 +14,12 @@ import stdgroup.enums.EyeColor;
 import stdgroup.enums.HairColor;
 import stdgroup.enums.Semester;
 
-import java.math.BigInteger;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Properties;
 
 public class DBManager {
     private final Connection connection;
@@ -34,20 +31,18 @@ public class DBManager {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String url = "jdbc:postgresql://localhost:5432/postgres";
-        String user = "postgres";
-        String pass = "admin";
-        connection = DriverManager.getConnection(url, user, pass);
+        String url = "jdbc:postgresql://pg:5432/studs";
+        Properties props = new Properties();
+        props.setProperty("user","s305246");
+        props.setProperty("password","bet699");
+        connection = DriverManager.getConnection(url, props);
         statement = connection.createStatement();
     }
 
     public CommandStatus check(User user) throws SQLException {
         PreparedStatement stm = connection.prepareStatement("select * from users where login = ?");
         stm.setString( 1, user.getLogin() );
-        if (user.getNewUser() && stm.executeUpdate() > 0){
-            return CommandStatus.WRONG_USERNAME;
-        }
-        else if (!user.getNewUser()){
+        if (!user.getNewUser()){
             if  (stm.executeUpdate() < 1)
                 return CommandStatus.WRONG_USERNAME;
             else if (checkUser( user ))

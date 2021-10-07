@@ -4,12 +4,15 @@ import commands.CommandManager;
 import exchange.CommandStatus;
 import exchange.Request;
 import exchange.Response;
-import stdgroup.Person;
-import stdgroup.RawGroup;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.concurrent.*;
+import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler implements Runnable{
     private final Socket socket;
@@ -17,11 +20,11 @@ public class ClientHandler implements Runnable{
     private final ExecutorService responseSender = Executors.newFixedThreadPool(10);
 
     private CommandManager commandManager;
-    private AuthManager authManager = new AuthManager(commandManager.getCollectionManager().getDbManager());
+    private AuthManager authManager = new AuthManager(new DBManager());
     private ConnectionHandler connectionHandler;
     private volatile ObjectOutputStream clientWriter;
     private volatile ObjectInputStream clientReader;
-    public ClientHandler(Socket socket, ConnectionHandler connectionHandler, CommandManager commandManager) throws IOException {
+    public ClientHandler(Socket socket, ConnectionHandler connectionHandler, CommandManager commandManager) throws IOException, SQLException {
         this.socket = socket;
         try {
             clientWriter = new  ObjectOutputStream(socket.getOutputStream());

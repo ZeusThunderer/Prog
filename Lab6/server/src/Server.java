@@ -1,14 +1,14 @@
 import commands.CommandManager;
-import exchange.CommandStatus;
-import exchange.Request;
-import exchange.Response;
-
 import utils.ClientHandler;
 import utils.ConnectionHandler;
 
-import java.io.*;
-import java.net.*;
-import java.util.concurrent.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.sql.SQLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Server {
@@ -38,9 +38,11 @@ public class Server {
                     break;
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
 
-            }
+        }
             stop();
     }
 
@@ -70,7 +72,7 @@ public class Server {
         } catch (IOException exception) {
             System.err.println("Произошла ошибка при попытке использовать порт '" + port + "'!");
         }
-    }
+   }
 
     /**
      * Connecting to client.
