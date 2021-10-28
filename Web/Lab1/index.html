@@ -1,0 +1,52 @@
+<!DOCTYPE html=
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>Lab1</title>
+		<link rel="stylesheet" href="main.css">
+	</head>
+	<body>
+		<div id="head">
+			<p>Закиров Тимур P3211 Вариант:11006</p>
+		</div>
+		<div id="image">
+		<img src="areas.png">
+		</div>
+		<div id="allInput">
+			<div id="inputX">
+				<label>Выберите X:</label>
+				<input type=radio value="-3" name=x><label>-3</label>
+				<input type=radio value="-2" name=x><label>-2</label>
+				<input type=radio value="-1" name=x><label>-1</label>
+				<input type=radio value="0" name=x><label>0</label>
+				<input type=radio value="1" name=x><label>1</label>
+				<input type=radio value="2" name=x><label>2</label>
+				<input type=radio value="3" name=x><label>3</label>
+				<input type=radio value="4" name=x><label>4</label>
+				<input type=radio value="5" name=x><label>5</label>
+			</div>
+			<div id="inputY" class="inline" >
+				<label for="y">Введите Y: </label>
+				<input id="y" type="text" name="y" placeholder="[-5; 3]" >
+			</div>
+			<div id="inputR" class="inline">
+				<label for="r">Введите R: </label>
+				<input type="text" id="r" name="r" placeholder="[1; 4]" >
+			</div>
+			<input type=submit  id="send"  class="inline" value="Submit">
+		</div>
+		<div>
+			<table class="result_table">
+				<tr>
+					<th class="variable">X</th>
+					<th class="variable">Y</th>
+					<th class="variable">R</th>
+					<th>Результат</th>
+					<th>Время отправки</th>
+					<th>Время обработки</th>
+				</tr>	
+			</table>
+		</div>
+		<script src="main.js"></script>
+	</body>
+</html>
