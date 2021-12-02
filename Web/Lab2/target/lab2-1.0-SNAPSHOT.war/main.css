@@ -1,0 +1,54 @@
+:root {
+	--background-color: #282828;
+	--svg-color: #EEEEEE;
+	--svg-figure-color: #339FFF;
+	--radius: 10px;
+}
+
+svg {
+	background-color: var(--svg-color);
+	border-radius: var(--radius);
+	transition-duration: 0.4s;
+}
+
+svg:hover {
+	box-shadow: 0 0 5px 3px rgba(0, 0, 30, 0.6);
+}
+
+.svg-figure {
+	fill: var(--svg-figure-color);
+}
+
+.svg-plot {
+	stroke: var(--background-color);
+	fill: var(--background-color);
+	stroke-width: 2px;
+}
+
+.svg-text {
+	fill: var(--background-color);
+}
+div {
+	padding-top: 10px;
+	padding-bottom: 15px;
+}
+body > div, form, header{
+	text-align: center;
+	border: solid;
+	border-top: none;
+    border-radius: 10px;
+}
+#head {
+	font: 28px sans-serif;
+	border-top: solid;
+}
+.inline {
+	display: inline-block;
+}
+input[type="submit"]{
+	margin: 5px;
+}
+.result_table {
+  width: 100%;
+  text-align: left
+}
