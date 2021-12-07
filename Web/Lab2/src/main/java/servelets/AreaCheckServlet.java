@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static servelets.ControllerServlet.checkArgs;
+
 @WebServlet(name = "AreaCheckServlet", value = "/AreaCheckServlet")
 public class AreaCheckServlet extends HttpServlet {
     private String message;
@@ -21,9 +23,7 @@ public class AreaCheckServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            double x = Double.parseDouble(req.getParameter("x"));
-            double y = Double.parseDouble(req.getParameter("y"));
-            double r = Double.parseDouble(req.getParameter("r"));
+            checkArgs(req);
         } catch (Exception e) {
                 getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
         }
@@ -37,7 +37,6 @@ public class AreaCheckServlet extends HttpServlet {
         else
             sendAJAXResponse(req, resp, point, session);
     }
-
     private ArrayList<Point> setResults(Point point, HttpSession session) {
         ArrayList<Point> results = (ArrayList) session.getAttribute("results");
         if(results == null)
