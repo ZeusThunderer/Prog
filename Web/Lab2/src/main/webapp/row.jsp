@@ -9,15 +9,14 @@
     </tr>
     <tbody>
     <tr>
-        <th class='the_X'><jsp:getProperty name="check" property="x"/>
-        </th>
-        <th class='the_Y'><jsp:getProperty name="check" property="y"/>
-        </th>
-        <th class='the_R'><jsp:getProperty  name="check" property="r"/>
-        </th>
-        <th class='result'><jsp:getProperty name="check" property="result"/>
-        </th>
-        </th>
+        <td class='the_X'><jsp:getProperty name="check" property="x"/>
+        </td>
+        <td class='the_Y'><jsp:getProperty name="check" property="y"/>
+        </td>
+        <td class='the_R'><jsp:getProperty  name="check" property="r"/>
+        </td>
+        <td class='result'><jsp:getProperty name="check" property="result"/>
+        </td>
     </tr>
     </tbody>
 </table>

@@ -33,15 +33,10 @@ function click(e) {
 
 		console.log(x + " " + y)
 
-		fetch(`ControllerServlet?x=${x}&y=${y}&r=${r}&clicked=1`).then(response => response.json())
-			.then(data => {
-				console.log(data)
-				let row = document.querySelector(".result_table").insertRow()
-				row.insertCell().appendChild(document.createTextNode(data.x))
-				row.insertCell().appendChild(document.createTextNode(data.y))
-				row.insertCell().appendChild(document.createTextNode(data.r))
-				row.insertCell().appendChild(document.createTextNode(data.result))
-			})
+		fetch(`ControllerServlet?x=${x}&y=${y}&r=${r}&clicked=1`).then(response => response.text()).then((response) => {
+			let row = document.querySelector(".result_table").insertRow();
+			row.innerHTML = response
+		})
 	}
 }
 

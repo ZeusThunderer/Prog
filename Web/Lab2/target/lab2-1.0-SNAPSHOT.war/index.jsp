@@ -93,15 +93,14 @@
                 for (Point check : (ArrayList<Point>) session.getAttribute("results")) {
         %>
         <tr>
-            <th class='X'><%=check.getX()%>
-            </th>
-            <th class='Y'><%=check.getY()%>
-            </th>
-            <th class='R'><%=check.getR()%>
-            </th>
-            <th class='result'><%=check.getResult()%>
-            </th>
-            </th>
+            <td class='X'><%=check.getX()%>
+            </td>
+            <td class='Y'><%=check.getY()%>
+            </td>
+            <td class='R'><%=check.getR()%>
+            </td>
+            <td class='result'><%=check.getResult()%>
+            </td>
         </tr>
         <%
                 }

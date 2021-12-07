@@ -1,5 +1,6 @@
 package servelets;
 
+import javax.json.Json;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +25,7 @@ public class AreaCheckServlet extends HttpServlet {
             double y = Double.parseDouble(req.getParameter("y"));
             double r = Double.parseDouble(req.getParameter("r"));
         } catch (Exception e) {
-                getServletContext().getRequestDispatcher("/error.jsp").forward(req, resp);
+                getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
         }
         HttpSession session = req.getSession(true);
         Point point= getPoint(req, resp);
@@ -37,23 +38,24 @@ public class AreaCheckServlet extends HttpServlet {
             sendAJAXResponse(req, resp, point, session);
     }
 
-    private ArrayList<Point> setResults(Point check, HttpSession session) {
+    private ArrayList<Point> setResults(Point point, HttpSession session) {
         ArrayList<Point> results = (ArrayList) session.getAttribute("results");
         if(results == null)
             results = new ArrayList();
-        results.add(check);
+        results.add(point);
         return results;
     }
 
     private void sendAJAXResponse(HttpServletRequest req, HttpServletResponse resp,Point point, HttpSession session) throws IOException {
-        String str =    "        <tr>\n" +
-                        "            <th>"+point.getX()+"</th>\n" +
-                        "            <th>"+point.getY()+"</th>\n" +
-                        "            <th>"+point.getR()+"</th>\n" +
-                        "            <th>"+point.getResult()+"</th>\n" +
-                        "        </tr>";
+        String json = Json.createObjectBuilder()
+                .add("x", point.getX())
+                .add("y", point.getY())
+                .add("r", point.getR())
+                .add("result", point.getResult())
+                .build()
+                .toString();
         resp.setContentType("text/json; charset=UTF-8");
-        resp.getWriter().write(str);
+        resp.getWriter().write(json);
     }
 
     private void headToTablePage(HttpServletRequest req, HttpServletResponse resp,Point point, HttpSession session) throws ServletException, IOException {
@@ -68,7 +70,7 @@ public class AreaCheckServlet extends HttpServlet {
         double y = Double.parseDouble(req.getParameter("y"));
         double r = Double.parseDouble(req.getParameter("r"));
         Point point = new Point(x, y, r);
-        point.setResult(isAreaHit(x, y, r));
+        point.setResult(isAreaHit(point));
         if (!isValid(x, y, r)){
             getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
             point.setValid(false);
@@ -76,9 +78,12 @@ public class AreaCheckServlet extends HttpServlet {
         return point;
     }
 
-    public boolean isAreaHit(double x, double y, double r) {
+    public boolean isAreaHit(Point point) {
+        double x = point.getX();
+        double y = point.getY();
+        double r = point.getR();
         return ((x >= -r) && (x <= 0) && (y >= 0) && (y <= r/2) && (y<=x/2 + r/2)) ||
-                ((x >= -r/2) && (x <= 0) && (y <= 0) && (y >= -r/2) && (y*y+x*x <= r/4  )) ||
+                ( (x <= 0) && (y <= 0) && (y*y+x*x <= r*r/4  )) ||
                 ((x >= 0) && (x <= r) && (y <= 0) && (y >= -r/2));
     }
 
